@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<WorkspaceViewState version="1.0">
+  <ExpandedNodes>
+    <Node path="officeStoreDomain.4pw" type="pm/main-project"/>
+    <Node path="officeStoreDomain.4pw/domainClasses" type="pm/group"/>
+    <Node path="officeStoreDomain.4pw/domainClasses/accountClass.4pw/accountDomain/account" type="pm/library"/>
+    <Node path="officeStoreDomain.4pw/domainClasses/credentialClass.4pw" type="pm/ext-project"/>
+    <Node path="officeStoreDomain.4pw/domainClasses/credentialClass.4pw/credentialDomain" type="pm/group"/>
+    <Node path="officeStoreDomain.4pw/domainClasses/credentialClass.4pw/credentialDomain/credential" type="pm/library"/>
+    <Node path="officeStoreDomain.4pw/domainClasses/supplierClass.4pw/supplierDomain" type="pm/group"/>
+  </ExpandedNodes>
+  <OpenDocuments>
+    <Document container="true" filePath="credential/credential.4gl" locator="160:1" module="mod-ce3">
+      <Data name="8" value="UTF-8"/>
+    </Document>
+    <Document container="true" filePath="credential/credentialTypes.inc" locator="41:1" module="mod-ce3">
+      <Data name="8" value="UTF-8"/>
+    </Document>
+    <Document container="true" filePath="C:/Users/fourj/Desktop/OneDrive/WWDC/WWDC2018/interfaces/interfaceToOfficestore/tokenFactory.4gl" locator="44:31" module="mod-ce3">
+      <Data name="8" value="UTF-8"/>
+    </Document>
+  </OpenDocuments>
+  <CurrentDocument filePath="" module="mod-wp"/>
+</WorkspaceViewState>

@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<WorkspaceDatabase fileContentsEncoding="CP1252" version="2.0">
+<File m="factoryRestInterface" n="factoryRestInterface.4gl" ts="20180919133034968">
+<Dep t="restAccountFactory.4gl"/>
+<Dep t="restCategoryFactory.4gl"/>
+<Dep t="restCookieFactory.4gl"/>
+<Dep t="restCredentialFactory.4gl"/>
+<Dep t="restItemFactory.4gl"/>
+<Dep t="restOrderFactory.4gl"/>
+<Dep t="restOrderItemFactory.4gl"/>
+<Dep t="restProductFactory.4gl"/>
+<Dep t="restProductImageFactory.4gl"/>
+<Dep t="restSupplierFactory.4gl"/>
+<Fct c="10" el="644" l="636" n="setOutputFormat(contentHeader STRING)" t="F"/>
+<Fct c="10" el="628" l="620" n="setInputFormat(contentHeader STRING)" t="F"/>
+<Fct c="18" el="546" l="540" n="getServicesDiscover()" t="F"/>
+<Fct c="10" el="533" l="452" n="marshalRestDelete(request com.HttpServiceRequest)" t="F">
+<Call c="10" l="470" n="setInputFormat" t="F"/>
+<Call c="10" l="471" n="setOutputFormat" t="F"/>
+<Call c="17" i="logger" l="476" n="logEvent" t="F"/>
+<Call c="26" i="restCookieFactory" l="493" n="checkCookies" p="restCookieFactory.4gl" t="F"/>
+<Call c="40" i="restCredentialFactory" l="499" n="removeAuthorization" p="restCredentialFactory.4gl" t="F"/>
+<Call c="37" i="restAccountFactory" l="504" n="processDelete" p="restAccountFactory.4gl" t="F"/>
+<Call c="17" i="logger" l="524" n="logEvent" t="F"/>
+</Fct>
+<Fct c="10" el="434" l="370" n="marshalRestPost(request com.HttpServiceRequest)" t="F">
+<Call c="17" i="logger" l="388" n="logEvent" t="F"/>
+<Call c="17" i="logger" l="396" n="logEvent" t="F"/>
+<Call c="17" i="logger" l="401" n="logEvent" t="F"/>
+<Call c="33" i="restAccountFactory" l="414" n="processInsert" p="restAccountFactory.4gl" t="F"/>
+<Call c="17" i="logger" l="425" n="logEvent" t="F"/>
+</Fct>
+<Fct c="10" el="352" l="276" n="marshalRestPut(request com.HttpServiceRequest)" t="F">
+<Call c="10" l="289" n="setInputFormat" t="F"/>
+<Call c="10" l="290" n="setOutputFormat" t="F"/>
+<Call c="17" i="logger" l="295" n="logEvent" t="F"/>
+<Call c="17" i="logger" l="303" n="logEvent" t="F"/>
+<Call c="17" i="logger" l="308" n="logEvent" t="F"/>
+<Call c="26" i="restCookieFactory" l="318" n="checkCookies" p="restCookieFactory.4gl" t="F"/>
+<Call c="37" i="restAccountFactory" l="323" n="processUpdate" p="restAccountFactory.4gl" t="F"/>
+<Call c="17" i="logger" l="343" n="logEvent" t="F"/>
+</Fct>
+<Fct c="10" el="258" l="96" n="marshalRestGet(request com.HttpServiceRequest)" t="F">
+<Call c="17" i="logger" l="118" n="logEvent" t="F"/>
+<Call c="10" l="121" n="setInputFormat" t="F"/>
+<Call c="10" l="122" n="setOutputFormat" t="F"/>
+<Call c="17" i="logger" l="128" n="logEvent" t="F"/>
+<Call c="26" i="restCookieFactory" l="147" n="checkCookies" p="restCookieFactory.4gl" t="F"/>
+<Call c="44" i="restCredentialFactory" l="155" n="processAuthorization" p="restCredentialFactory.4gl" t="F"/>
+<Call c="44" i="restCookieFactory" l="159" n="bakeCookies" p="restCookieFactory.4gl" t="F"/>
+<Call c="71" i="restCookieFactory" l="161" n="getCookies" p="restCookieFactory.4gl" t="F"/>
+<Call c="41" i="restAccountFactory" l="168" n="processQuery" t="F"/>
+<Call c="42" i="restCategoryFactory" l="174" n="processQuery" t="F"/>
+<Call c="38" i="restItemFactory" l="180" n="processQuery" t="F"/>
+<Call c="39" i="restOrderFactory" l="186" n="processQuery" t="F"/>
+<Call c="43" i="restOrderItemFactory" l="192" n="processQuery" t="F"/>
+<Call c="41" i="restProductFactory" l="198" n="processQuery" t="F"/>
+<Call c="42" i="restSupplierFactory" l="204" n="processQuery" t="F"/>
+<Call c="46" i="restProductImageFactory" l="210" n="processQuery" t="F"/>
+<Call c="17" i="logger" l="241" n="logEvent" t="F"/>
+</Fct>
+<Todo l="70" t="Implement pagination(Range header vs. query-string(offset and limit)?&#13;"/>
+<Todo l="71" t="Content range responses?&#13;"/>
+<Todo l="72" t="What about sorting?&#13;"/>
+<Todo l="410" t="may need to move authZ up to the server&#13;"/>
+<Todo l="496" t="Process authorization delete, TBD; &#13;"/>
+<Todo l="539" t="Is this resource specific or an API docuement?&#13;"/>
+<Todo l="618" t="for future in determining request format(JSON/XML)&#13;"/>
+<Todo l="634" t="for future in determining response format(JSON/XML)&#13;"/>
+</File>
+<File m="restAccountFactory" n="restAccountFactory.4gl" ts="20180910140047134">
+<Dep t="../../domain/account/account.4gl"/>
+<Fct c="10" el="257" l="196" n="processDelete(deleteFilter STRING)" t="F">
+<Call c="21" i="logger" l="209" n="logEvent" t="F"/>
+<Call c="22" i="account" l="217" n="initQuery" t="F"/>
+<Call c="30" i="account" l="221" n="setQueryID" t="F"/>
+<Call c="39" i="account" l="234" n="deleteRecords" t="F"/>
+<Call c="21" i="logger" l="250" n="logEvent" t="F"/>
+</Fct>
+<Fct c="10" el="185" l="155" n="processInsert(insertPayload STRING)" t="F">
+<Call c="21" i="logger" l="160" n="logEvent" t="F"/>
+<Call c="22" i="account" l="164" n="init" t="F"/>
+<Call c="22" i="account" l="165" n="initQuery" t="F"/>
+<Call c="44" i="account" l="167" n="processRecordsInsert" t="F"/>
+<Call c="44" i="account" l="168" n="getJSONEncoding" t="F"/>
+<Call c="21" i="logger" l="177" n="logEvent" t="F"/>
+</Fct>
+<Fct c="10" el="144" l="114" n="processUpdate(updatePayload STRING)" t="F">
+<Call c="21" i="logger" l="119" n="logEvent" t="F"/>
+<Call c="22" i="account" l="123" n="init" t="F"/>
+<Call c="22" i="account" l="124" n="initQuery" t="F"/>
+<Call c="44" i="account" l="126" n="processRecordsUpdate" t="F"/>
+<Call c="44" i="account" l="127" n="getJSONEncoding" t="F"/>
+<Call c="21" i="logger" l="136" n="logEvent" t="F"/>
+</Fct>
+<Fct c="10" el="103" l="42" n="processQuery(queryFilter STRING)" t="F">
+<Call c="21" i="logger" l="57" n="logEvent" t="F"/>
+<Call c="22" i="account" l="63" n="initQuery" t="F"/>
+<Call c="24" i="account" l="66" n="isValidQuery" t="F"/>
+<Call c="30" i="account" l="67" n="addQueryFilter" t="F"/>
+<Call c="26" i="account" l="81" n="getRecords" t="F"/>
+<Call c="40" i="account" l="84" n="getRecordsList" t="F"/>
+<Call c="48" i="account" l="85" n="getJSONEncoding" t="F"/>
+<Call c="21" i="logger" l="96" n="logEvent" t="F"/>
+</Fct>
+</File>
+<File m="restCategoryFactory" n="restCategoryFactory.4gl" ts="20180910140047361">
+<Dep t="../../domain/category/category.4gl"/>
+<Fct c="10" el="89" l="33" n="processQuery(queryFilter STRING)" t="F">
+<Call c="21" i="logger" l="46" n="logEvent" t="F"/>
+<Call c="23" i="category" l="52" n="initQuery" t="F"/>
+<Call c="25" i="category" l="55" n="isValidQuery" t="F"/>
+<Call c="31" i="category" l="56" n="addQueryFilter" t="F"/>
+<Call c="27" i="category" l="69" n="getRecords" t="F"/>
+<Call c="49" i="category" l="72" n="getJSONEncoding" t="F"/>
+<Call c="21" i="logger" l="83" n="logEvent" t="F"/>
+</Fct>
+</File>
+<File m="restCookieFactory" n="restCookieFactory.4gl" ts="20180910140047298">
+<Dep t="../../domain/credential/credential.4gl"/>
+<Fct c="10" el="121" l="117" n="eatCookies(thisCookie STRING)" t="F">
+<Call c="17" i="logger" l="118" n="logEvent" t="F"/>
+</Fct>
+<Fct c="10" el="107" l="88" n="checkCookies(thisCookieToken STRING)" t="F">
+<Call c="17" i="logger" l="92" n="logEvent" t="F"/>
+</Fct>
+<Fct c="10" el="77" l="73" n="getCookies()" t="F">
+<Call c="17" i="logger" l="74" n="logEvent" t="F"/>
+</Fct>
+<Fct c="10" el="63" l="43" n="bakeCookies(cookieName STRING,base STRING,http BOOLEAN)" t="F">
+<Call c="17" i="logger" l="46" n="logEvent" t="F"/>
+<Call c="41" i="credential" l="60" n="createSessionToken" t="F"/>
+</Fct>
+<Todo l="42" t="Perhaps there is more than one cookie; if so, send an array &#13;"/>
+<Todo l="59" t="move to cookie domain?&#13;"/>
+</File>
+<File m="restCredentialFactory" n="restCredentialFactory.4gl" ts="20180919112441498">
+<Dep t="../../domain/credential/credential.4gl"/>
+<Fct c="17" el="190" l="171" n="removeAuthorization(req com.HttpServiceRequest)" t="F"/>
+<Fct c="10" el="160" l="43" n="processAuthorization(userLogin STRING)" t="F">
+<Call c="21" i="logger" l="52" n="logEvent" t="F"/>
+<Call c="25" i="credential" l="68" n="initQuery" t="F"/>
+<Call c="29" i="credential" l="77" n="addQueryFilter" t="F"/>
+<Call c="24" i="credential" l="81" n="isValid" t="F"/>
+<Call c="51" i="credential" l="86" n="getJSONEncoding" t="F"/>
+<Call c="21" i="logger" l="101" n="logEvent" t="F"/>
+<Call c="17" i="logger" l="105" n="logEvent" t="F"/>
+</Fct>
+<Todo l="170" t="Add logic to remove cookie(s)&#13;"/>
+<Todo l="204" t="Remove this if not needed&#13;"/>
+</File>
+<File m="restItemFactory" n="restItemFactory.4gl" ts="20180910140047217">
+<Dep t="../../domain/orderItem/orderItem.4gl"/>
+<Fct c="10" el="95" l="37" n="processQuery(queryFilter STRING)" t="F">
+<Call c="21" i="logger" l="51" n="logEvent" t="F"/>
+<Call c="24" i="orderItem" l="57" n="initQuery" t="F"/>
+<Call c="26" i="orderItem" l="60" n="isValidQuery" t="F"/>
+<Call c="32" i="orderItem" l="61" n="addQueryFilter" t="F"/>
+<Call c="28" i="orderItem" l="74" n="getRecords" t="F"/>
+<Call c="50" i="orderItem" l="77" n="getJSONEncoding" t="F"/>
+<Call c="21" i="logger" l="88" n="logEvent" t="F"/>
+</Fct>
+</File>
+<File m="restOrderFactory" n="restOrderFactory.4gl" ts="20180910140046932">
+<Dep t="../../domain/order/order.4gl"/>
+<Fct c="10" el="95" l="37" n="processQuery(queryFilter STRING)" t="F">
+<Call c="21" i="logger" l="51" n="logEvent" t="F"/>
+<Call c="20" i="order" l="57" n="initQuery" t="F"/>
+<Call c="22" i="order" l="60" n="isValidQuery" t="F"/>
+<Call c="28" i="order" l="61" n="addQueryFilter" t="F"/>
+<Call c="24" i="order" l="74" n="getRecords" t="F"/>
+<Call c="46" i="order" l="77" n="getJSONEncoding" t="F"/>
+<Call c="21" i="logger" l="88" n="logEvent" t="F"/>
+</Fct>
+</File>
+<File m="restOrderItemFactory" n="restOrderItemFactory.4gl" ts="20180910140046684">
+<Dep t="../../domain/orderItem/orderItem.4gl"/>
+<Fct c="10" el="96" l="37" n="processQuery(queryFilter STRING)" t="F">
+<Call c="21" i="logger" l="51" n="logEvent" t="F"/>
+<Call c="24" i="orderItem" l="57" n="initQuery" t="F"/>
+<Call c="26" i="orderItem" l="60" n="isValidQuery" t="F"/>
+<Call c="32" i="orderItem" l="61" n="addQueryFilter" t="F"/>
+<Call c="28" i="orderItem" l="74" n="getRecords" t="F"/>
+<Call c="50" i="orderItem" l="77" n="getJSONEncoding" t="F"/>
+<Call c="21" i="logger" l="88" n="logEvent" t="F"/>
+</Fct>
+</File>
+<File m="restProductFactory" n="restProductFactory.4gl" ts="20180919121308725">
+<Dep t="../../domain/product/product.4gl"/>
+<Fct c="10" el="95" l="37" n="processQuery(queryFilter STRING)" t="F">
+<Call c="21" i="logger" l="51" n="logEvent" t="F"/>
+<Call c="22" i="product" l="57" n="initQuery" t="F"/>
+<Call c="24" i="product" l="60" n="isValidQuery" t="F"/>
+<Call c="30" i="product" l="61" n="addQueryFilter" t="F"/>
+<Call c="26" i="product" l="74" n="getRecords" t="F"/>
+<Call c="48" i="product" l="77" n="getJSONEncoding" t="F"/>
+<Call c="21" i="logger" l="88" n="logEvent" t="F"/>
+</Fct>
+</File>
+<File m="restProductImageFactory" n="restProductImageFactory.4gl" ts="20180919133035030">
+<Dep t="../../domain/product/product.4gl"/>
+<Fct c="10" el="164" l="149" n="getImageFilenameProductId(p_id INTEGER)" t="F"/>
+<Fct c="10" el="146" l="121" n="getProductImagePath(queryFilter STRING)" t="F">
+<Call c="18" l="125" n="getImageFilenameFromId" t="F"/>
+<Call c="28" l="133" n="getImageFilenameFromId" t="F"/>
+</Fct>
+<Fct c="10" el="110" l="38" n="processQuery(queryFilter STRING)" t="F">
+<Call c="25" l="52" n="getProductImagePath" t="F"/>
+<Call c="21" i="logger" l="59" n="logEvent" t="F"/>
+</Fct>
+</File>
+<File m="restSupplierFactory" n="restSupplierFactory.4gl" ts="20180910140046760">
+<Dep t="../../domain/supplier/supplier.4gl"/>
+<Fct c="10" el="95" l="37" n="processQuery(queryFilter STRING)" t="F">
+<Call c="21" i="logger" l="51" n="logEvent" t="F"/>
+<Call c="23" i="supplier" l="57" n="initQuery" t="F"/>
+<Call c="25" i="supplier" l="60" n="isValidQuery" t="F"/>
+<Call c="31" i="supplier" l="61" n="addQueryFilter" t="F"/>
+<Call c="27" i="supplier" l="74" n="getRecords" t="F"/>
+<Call c="49" i="supplier" l="77" n="getJSONEncoding" t="F"/>
+<Call c="21" i="logger" l="88" n="logEvent" t="F"/>
+</Fct>
+</File>
+</WorkspaceDatabase>

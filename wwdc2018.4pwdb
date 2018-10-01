@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<WorkspaceDatabase fileContentsEncoding="CP1252" version="2.0">
+<File m="rai" n="interfaces/interfaceToOfficestore/rai.4gl" ts="20180927153812174">
+<Fct c="1" el="11" l="2" n="main()" t="F"/>
+</File>
+<File m="demoClient" n="webservices/Client/demoClient.4gl" ts="20180921111123125">
+<Fct c="10" el="971" l="925" n="validLogin(logIn STRING,password STRING)" t="F"/>
+<Fct c="10" el="923" l="900" n="getUserLogin()" t="F"/>
+<Fct c="10" el="898" l="868" n="deleteCustomer(thisCustomer STRING)" t="F"/>
+<Fct c="10" el="866" l="833" n="postCustomer(thisCustomer RECORD)" t="F"/>
+<Fct c="10" el="831" l="795" n="putCustomer(cust_rec RECORD)" t="F"/>
+<Fct c="10" el="793" l="778" n="errorHandler()" t="F"/>
+<Fct c="8" el="770" l="738" n="report_all_customers(accountData RECORD)" t="R"/>
+<Fct c="10" el="730" l="718" n="runReportFromDatabase(handler om.SaxDocumentHandler)" t="F">
+<Call c="18" l="723" n="report_all_customers" t="R"/>
+<Call c="26" l="725" n="report_all_customers" t="R"/>
+<Call c="19" l="727" n="report_all_customers" t="R"/>
+</Fct>
+<Fct c="10" el="710" l="706" n="getPreviewDevice()" t="F"/>
+<Fct c="10" el="698" l="685" n="configureOutput(opt STRING)" t="F">
+<Call c="12" l="687" n="fgl_report_loadCurrentSettings" t="F"/>
+<Call c="10" l="694" n="fgl_report_selectDevice" t="F"/>
+<Call c="10" l="695" n="fgl_report_selectPreview" t="F"/>
+<Call c="12" l="696" n="fgl_report_commitCurrentSettings" t="F"/>
+</Fct>
+<Fct c="10" el="677" l="666" n="report(opt STRING)" t="F">
+<Call c="19" l="669" n="configureOutput" t="F"/>
+<Call c="10" l="675" n="runReportFromDatabase" t="F"/>
+</Fct>
+<Fct c="10" el="658" l="656" n="consoleLogger(logCategory INTEGER,logClass STRING,logEvent STRING,logMessage STRING)" t="F"/>
+<Fct c="10" el="648" l="633" n="fillOrderItemData()" t="F">
+<Call c="25" i="logger" l="641" n="logEvent" t="F"/>
+</Fct>
+<Fct c="10" el="623" l="554" n="showOrderDetail(thisOrder STRING)" t="F">
+<Call c="10" l="581" n="retrieveOrderItems" t="F"/>
+</Fct>
+<Fct c="10" el="545" l="530" n="fillOrderData(thisUser STRING)" t="F">
+<Call c="25" i="logger" l="538" n="logEvent" t="F"/>
+</Fct>
+<Fct c="10" el="520" l="391" n="clientOutput(opt STRING)" t="F">
+<Call c="26" l="424" n="fillOrderData" t="F"/>
+<Call c="26" l="434" n="showOrderDetail" t="F"/>
+<Call c="22" l="455" n="putCustomer" t="F"/>
+<Call c="18" l="487" n="postCustomer" t="F"/>
+<Call c="23" l="491" n="deleteCustomer" t="F"/>
+<Call c="14" l="516" n="report" t="F"/>
+</Fct>
+<Fct c="10" el="381" l="345" n="doRESTRequest(requestResource STRING)" t="F">
+<Call c="18" l="375" n="errorHandler" t="F"/>
+</Fct>
+<Fct c="10" el="336" l="296" n="retrieveOrderItems(thisOrder STRING)" t="F">
+<Call c="20" l="302" n="doRESTRequest" t="F"/>
+<Call c="18" l="325" n="errorHandler" t="F"/>
+<Call c="18" l="331" n="errorHandler" t="F"/>
+</Fct>
+<Fct c="10" el="281" l="242" n="retrieveOrders()" t="F">
+<Call c="20" l="247" n="doRESTRequest" t="F"/>
+<Call c="18" l="269" n="errorHandler" t="F"/>
+<Call c="18" l="275" n="errorHandler" t="F"/>
+</Fct>
+<Fct c="10" el="227" l="187" n="retrieveCustomers()" t="F">
+<Call c="20" l="192" n="doRESTRequest" t="F"/>
+<Call c="22" l="214" n="errorHandler" t="F"/>
+<Call c="18" l="220" n="errorHandler" t="F"/>
+</Fct>
+<Fct c="1" el="174" l="103" n="main()" t="F">
+<Call c="29" l="110" n="errorHandler" t="F"/>
+<Call c="17" i="logger" l="113" n="initializeLog" t="F"/>
+<Call c="17" i="logger" l="115" n="setLoggerFunction" t="F"/>
+<Call c="44" l="115" n="consoleLogger" t="F"/>
+<Call c="14" l="139" n="getUserLogin" t="F"/>
+<Call c="8" l="146" n="validLogin" t="F"/>
+<Call c="18" l="150" n="retrieveCustomers" t="F"/>
+<Call c="18" l="154" n="errorHandler" t="F"/>
+<Call c="18" l="159" n="retrieveOrders" t="F"/>
+<Call c="18" l="163" n="errorHandler" t="F"/>
+<Call c="21" i="logger" l="166" n="logEvent" t="F"/>
+<Call c="14" l="169" n="clientOutput" t="F"/>
+<Call c="14" i="fgldialog" l="171" n="fgl_winMessage" t="F"/>
+</Fct>
+<Todo l="182" t="implementation according to REST principle #4 above...response should &#13;"/>
+<Todo l="238" t="implementation according to REST principle #4 above...response should &#13;"/>
+<Todo l="292" t="implementation according to REST principle #4 above...response should &#13;"/>
+<Todo l="402" t="need a &quot;refesh&quot; after every &quot;CRUD&quot;&#13;"/>
+</File>
+<File m="restServer" n="webservices/Server/restServer.4gl" ts="20180907034607722">
+<Dep t="foundation/http/http.4gl"/>
+<Dep t="interfaces/interfaceToOfficestore/factoryRestInterface.4gl"/>
+<Dep t="foundation/logger/logger.4gl"/>
+<Dep t="foundation/application/appUtility.4gl"/>
+<Fct c="10" el="189" l="172" n="checkListenerStatus(listenerStatus INTEGER)" t="F">
+<Call c="25" i="logger" l="176" n="logEvent" t="F"/>
+<Call c="18" l="177" n="programExit" t="F"/>
+<Call c="29" i="logger" l="181" n="logEvent" t="F"/>
+<Call c="29" i="logger" l="183" n="logEvent" t="F"/>
+<Call c="22" l="184" n="programExit" t="F"/>
+</Fct>
+<Fct c="10" el="164" l="143" n="errorHandler()" t="F">
+<Call c="17" i="logger" l="162" n="logEvent" t="F"/>
+<Call c="10" l="163" n="programExit" t="F"/>
+</Fct>
+<Fct c="1" el="136" l="51" n="main()" t="F">
+<Call c="29" l="58" n="errorHandler" t="F"/>
+<Call c="25" i="appUtility" l="63" n="initialize" t="F"/>
+<Call c="21" i="logger" l="72" n="logEvent" t="F"/>
+<Call c="21" i="logger" l="74" n="logEvent" t="F"/>
+<Call c="14" l="79" n="errorHandler" t="F"/>
+<Call c="21" i="logger" l="80" n="logEvent" t="F"/>
+<Call c="14" l="81" n="programExit" t="F"/>
+<Call c="21" i="logger" l="86" n="logEvent" t="F"/>
+<Call c="21" i="logger" l="90" n="logEvent" t="F"/>
+<Call c="14" l="96" n="checkListenerStatus" t="F"/>
+<Call c="21" i="logger" l="98" n="logEvent" t="F"/>
+<Call c="39" i="factoryRestInterface" l="104" n="marshalRestGet" t="F"/>
+<Call c="39" i="factoryRestInterface" l="108" n="marshalRestPost" t="F"/>
+<Call c="39" i="factoryRestInterface" l="112" n="marshalRestPut" t="F"/>
+<Call c="39" i="factoryRestInterface" l="116" n="marshalRestDelete" t="F"/>
+<Call c="25" i="logger" l="120" n="logEvent" t="F"/>
+<Call c="17" i="logger" l="133" n="logEvent" t="F"/>
+<Call c="10" l="134" n="programExit" t="F"/>
+</Fct>
+<Todo l="14" t="Service versioning?  Do this VERY sparingly&#13;"/>
+<Todo l="15" t="Representational formatting...i.e. &apos;.json&apos; or &apos;.xml&apos; in URI?&#13;"/>
+<Todo l="16" t="Cacheability?&#13;"/>
+<Todo l="17" t="Handling cross-domain(CORS support)?&#13;"/>
+<Todo l="18" t="Consider refactoring reposnes for on exit point&#13;"/>
+<Bug l="19" t="GWS-999999&#13;"/>
+</File>
+</WorkspaceDatabase>
