@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<WorkspaceDatabase fileContentsEncoding="CP1252" version="2.0">
+<File m="product" n="product.4gl" ts="20180919114525150">
+<Ref t="productTypes.inc"/>
+<Fct c="10" el="455" l="453" n="setQueryid(thisID STRING)" t="F"/>
+<Fct c="10" el="451" l="448" n="initQuery()" t="F"/>
+<Fct c="17" el="443" l="436" n="addQueryFilter(columnKey STRING,columnValue STRING)" t="F"/>
+<Fct c="17" el="420" l="411" n="isValidQuery(queryName STRING)" t="F"/>
+<Fct c="18" el="394" l="392" n="getQueryFilter()" t="F"/>
+<Fct c="18" el="375" l="361" n="deleteRecordById(thisData STRING)" t="F"/>
+<Fct c="10" el="343" l="320" n="processRecordsDelete(thisData STRING)" t="F">
+<Call c="18" l="334" n="deleteRecordById" t="F"/>
+</Fct>
+<Fct c="18" el="302" l="286" n="insertRecord(thisData STRING)" t="F"/>
+<Fct c="10" el="268" l="244" n="processRecordsInsert(thisData STRING)" t="F">
+<Call c="18" l="258" n="insertRecord" t="F"/>
+</Fct>
+<Fct c="18" el="227" l="209" n="updateRecordById(thisData STRING)" t="F"/>
+<Fct c="10" el="191" l="157" n="processRecordsUpdate(thisData STRING)" t="F">
+<Call c="18" l="174" n="updateRecordById" t="F"/>
+</Fct>
+<Fct c="10" el="139" l="137" n="getRecordsList()" t="F"/>
+<Fct c="10" el="119" l="117" n="init()" t="F"/>
+<Fct c="10" el="100" l="98" n="getJSONEncoding()" t="F"/>
+<Fct c="10" el="81" l="57" n="getRecords()" t="F">
+<Call c="50" l="64" n="getQueryFilter" t="F"/>
+<Call c="17" i="logger" l="66" n="logEvent" t="F"/>
+</Fct>
+<Todo l="39" t="determine if mutators should be used instead; should be PRIVATE; how to do this for an array&#13;"/>
+<Todo l="188" t="formulate a JSON style response for an update&#13;"/>
+<Todo l="265" t="formulate a JSON style response for an update&#13;"/>
+<Todo l="299" t="formulate a JSON style response for an update&#13;"/>
+<Todo l="372" t="formulate a JSON style response for an update&#13;"/>
+</File>
+<File m="productTypes" n="productTypes.inc" ts="20170629185411908"/>
+<File m="tester" n="tester.4gl" ts="20170717101611148">
+<Dep t="product.4gl"/>
+<Fct c="1" el="65" l="4" n="main()" t="F">
+<Call c="22" i="product" l="12" n="setQueryID" p="product.4gl" t="F"/>
+<Call c="22" i="product" l="13" n="getRecords" p="product.4gl" t="F"/>
+<Call c="52" i="product" l="19" n="getJSONEncoding" p="product.4gl" t="F"/>
+<Call c="43" i="product" l="24" n="getJSONEncoding" p="product.4gl" t="F"/>
+<Call c="14" l="24" n="processRecordsUpdate" p="product.4gl" t="F"/>
+<Call c="22" i="product" l="25" n="getRecords" p="product.4gl" t="F"/>
+<Call c="57" i="product" l="26" n="getJSONEncoding" p="product.4gl" t="F"/>
+<Call c="43" i="product" l="29" n="getJSONEncoding" p="product.4gl" t="F"/>
+<Call c="14" l="29" n="processRecordsUpdate" p="product.4gl" t="F"/>
+<Call c="22" i="product" l="30" n="getRecords" p="product.4gl" t="F"/>
+<Call c="58" i="product" l="31" n="getJSONEncoding" p="product.4gl" t="F"/>
+<Call c="18" i="product" l="38" n="init" p="product.4gl" t="F"/>
+<Call c="43" i="product" l="45" n="getJSONEncoding" p="product.4gl" t="F"/>
+<Call c="14" l="45" n="processRecordsInsert" p="product.4gl" t="F"/>
+<Call c="22" i="product" l="46" n="setQueryID" p="product.4gl" t="F"/>
+<Call c="22" i="product" l="47" n="getRecords" p="product.4gl" t="F"/>
+<Call c="57" i="product" l="48" n="getJSONEncoding" p="product.4gl" t="F"/>
+<Call c="22" i="product" l="56" n="init" p="product.4gl" t="F"/>
+<Call c="43" i="product" l="58" n="getJSONEncoding" p="product.4gl" t="F"/>
+<Call c="14" l="58" n="processRecordsDelete" p="product.4gl" t="F"/>
+<Call c="22" i="product" l="59" n="setQueryID" p="product.4gl" t="F"/>
+<Call c="22" i="product" l="60" n="getRecords" p="product.4gl" t="F"/>
+<Call c="123" i="product" l="61" n="getJSONEncoding" p="product.4gl" t="F"/>
+</Fct>
+</File>
+</WorkspaceDatabase>
