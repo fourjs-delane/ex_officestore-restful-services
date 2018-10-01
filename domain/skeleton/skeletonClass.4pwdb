@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<WorkspaceDatabase fileContentsEncoding="CP1252" version="2.0">
+<File m="skeleton" n="skeleton.4gl" ts="20180619210945240">
+<Fct c="10" el="529" l="527" n="setQueryLname(thisID STRING)" t="F"/>
+<Fct c="10" el="525" l="523" n="setQueryFname(thisID STRING)" t="F"/>
+<Fct c="10" el="521" l="519" n="setQueryid(thisID STRING)" t="F"/>
+<Fct c="10" el="517" l="514" n="initQuery()" t="F"/>
+<Fct c="17" el="509" l="498" n="addQueryFilter(columnKey STRING,columnValue STRING)" t="F"/>
+<Fct c="17" el="482" l="469" n="isValidQuery(queryName STRING)" t="F"/>
+<Fct c="18" el="452" l="450" n="getQueryFilter()" t="F"/>
+<Fct c="18" el="433" l="413" n="deleteRecordById(recordID STRING)" t="F">
+<Call c="17" i="logger" l="418" n="logEvent" t="F"/>
+<Call c="17" i="logger" l="427" n="logEvent" t="F"/>
+</Fct>
+<Fct c="18" el="395" l="372" n="processRecordsDelete(deletePayload STRING)" t="F">
+<Call c="15" l="386" n="deleteRecordById" t="F"/>
+</Fct>
+<Fct c="17" el="354" l="329" n="deleteRecords()" t="F">
+<Call c="21" i="logger" l="339" n="logEvent" t="F"/>
+</Fct>
+<Fct c="18" el="312" l="291" n="insertRecord(thisData STRING)" t="F">
+<Call c="17" i="logger" l="297" n="logEvent" t="F"/>
+<Call c="17" i="logger" l="307" n="logEvent" t="F"/>
+</Fct>
+<Fct c="17" el="272" l="248" n="processRecordsInsert(thisData STRING)" t="F">
+<Call c="18" l="262" n="insertRecord" t="F"/>
+</Fct>
+<Fct c="18" el="230" l="212" n="updateRecordById(thisData STRING)" t="F"/>
+<Fct c="17" el="194" l="158" n="processRecordsUpdate(thisData STRING)" t="F">
+<Call c="18" l="175" n="updateRecordById" t="F"/>
+<Call c="25" i="logger" l="177" n="logEvent" t="F"/>
+</Fct>
+<Fct c="17" el="140" l="138" n="getRecordsList()" t="F"/>
+<Fct c="17" el="120" l="118" n="init()" t="F"/>
+<Fct c="17" el="101" l="99" n="getJSONEncoding()" t="F"/>
+<Fct c="17" el="82" l="59" n="getRecords()" t="F">
+<Call c="50" l="66" n="getQueryFilter" t="F"/>
+<Call c="17" i="logger" l="68" n="logEvent" t="F"/>
+</Fct>
+<Todo l="41" t="determine if mutators should be used instead; should be PRIVATE; how to do this for an array&#13;"/>
+<Todo l="191" t="formulate a JSON style response for an update&#13;"/>
+<Todo l="269" t="formulate a JSON style response for an update&#13;"/>
+<Todo l="430" t="formulate a JSON style response for an update&#13;"/>
+</File>
+<File m="skeletonTypes" n="skeletonTypes.inc" ts="20180619210945271"/>
+</WorkspaceDatabase>
