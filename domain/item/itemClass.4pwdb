@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <WorkspaceDatabase fileContentsEncoding="CP1252" version="2.0">
-<File m="item" n="item.4gl" ts="20170803183006971">
+<File m="item" n="item.4gl" ts="20181011085735921">
 <Ref t="itemTypes.inc"/>
-<Fct c="10" el="371" l="369" n="setQueryid(thisID STRING)" t="F"/>
+<Fct c="10" el="371" l="369" n="setQueryid(thisID STRING)" t="F" v="pub"/>
 <Fct c="18" el="364" l="350" n="deleteRecordById(thisData STRING)" t="F"/>
-<Fct c="10" el="332" l="309" n="processRecordsDelete(thisData STRING)" t="F">
+<Fct c="10" el="332" l="309" n="processRecordsDelete(thisData STRING)" t="F" v="pub">
 <Call c="18" l="323" n="deleteRecordById" t="F"/>
 </Fct>
 <Fct c="18" el="291" l="275" n="insertRecord(thisData STRING)" t="F"/>
-<Fct c="10" el="257" l="233" n="processRecordsInsert(thisData STRING)" t="F">
+<Fct c="10" el="257" l="233" n="processRecordsInsert(thisData STRING)" t="F" v="pub">
 <Call c="18" l="247" n="insertRecord" t="F"/>
 </Fct>
 <Fct c="18" el="216" l="198" n="updateRecordById(thisData STRING)" t="F"/>
-<Fct c="10" el="180" l="146" n="processRecordsUpdate(thisData STRING)" t="F">
+<Fct c="10" el="180" l="146" n="processRecordsUpdate(thisData STRING)" t="F" v="pub">
 <Call c="18" l="163" n="updateRecordById" t="F"/>
 </Fct>
-<Fct c="10" el="128" l="126" n="getRecordsList()" t="F"/>
-<Fct c="10" el="108" l="106" n="init()" t="F"/>
-<Fct c="10" el="89" l="87" n="getJSONEncoding()" t="F"/>
-<Fct c="10" el="70" l="49" n="getRecords()" t="F"/>
-<Todo l="31" t=" determine if mutators should be used instead; should be PRIVATE; how to do this for an array&#13;"/>
-<Todo l="177" t=" formulate a JSON style response for an update&#13;"/>
-<Todo l="254" t=" formulate a JSON style response for an update&#13;"/>
-<Todo l="288" t=" formulate a JSON style response for an update&#13;"/>
-<Todo l="361" t=" formulate a JSON style response for an update&#13;"/>
+<Fct c="10" el="128" l="126" n="getRecordsList()" t="F" v="pub"/>
+<Fct c="10" el="108" l="106" n="init()" t="F" v="pub"/>
+<Fct c="10" el="89" l="87" n="getJSONEncoding()" t="F" v="pub"/>
+<Fct c="10" el="70" l="49" n="getRecords()" t="F" v="pub"/>
+<Todo l="31" t="determine if mutators should be used instead; should be PRIVATE; how to do this for an array&#13;"/>
+<Todo l="177" t="formulate a JSON style response for an update&#13;"/>
+<Todo l="254" t="formulate a JSON style response for an update&#13;"/>
+<Todo l="288" t="formulate a JSON style response for an update&#13;"/>
+<Todo l="361" t="formulate a JSON style response for an update&#13;"/>
 </File>
-<File m="itemTypes" n="itemTypes.inc" ts="20170717085711292"/>
+<File m="itemTypes" n="itemTypes.inc" ts="20181011085732395"/>
 <File m="tester" n="tester.4gl" ts="20170717092804944">
 <Dep t="item.4gl"/>
 <Fct c="1" el="70" l="5" n="main()" t="F">

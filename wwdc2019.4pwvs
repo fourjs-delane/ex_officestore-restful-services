@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<WorkspaceViewState version="1.0">
+  <ExpandedNodes>
+    <Node path="wwdc2019.4pw" type="pm/main-project"/>
+    <Node path="wwdc2019.4pw/Application Libraries" type="pm/group"/>
+    <Node path="wwdc2019.4pw/Application Libraries/foundation.4pw" type="pm/ext-project"/>
+    <Node path="wwdc2019.4pw/Application Libraries/foundation.4pw/foundation" type="pm/group"/>
+    <Node path="wwdc2019.4pw/Application Libraries/foundation.4pw/foundation/appFoundation" type="pm/library"/>
+    <Node path="wwdc2019.4pw/Application Libraries/interfaces.4pw" type="pm/ext-project"/>
+    <Node path="wwdc2019.4pw/Application Libraries/interfaces.4pw/interfaces" type="pm/group"/>
+    <Node path="wwdc2019.4pw/Application Libraries/interfaces.4pw/interfaces/interfaceToOfficestore" type="pm/library"/>
+    <Node path="wwdc2019.4pw/Application Libraries/interfaces.4pw/interfaces/officeStoreDomain.4pw/domainClasses" type="pm/group"/>
+    <Node path="wwdc2019.4pw/Application Libraries/interfaces.4pw/interfaces/officeStoreDomain.4pw/domainClasses/accountClass.4pw/accountDomain" type="pm/group"/>
+    <Node path="wwdc2019.4pw/Application Libraries/interfaces.4pw/interfaces/officeStoreDomain.4pw/domainClasses/accountClass.4pw/accountDomain/account" type="pm/library"/>
+    <Node path="wwdc2019.4pw/Application Libraries/interfaces.4pw/interfaces/officeStoreDomain.4pw/domainClasses/itemClass.4pw" type="pm/ext-project"/>
+    <Node path="wwdc2019.4pw/Application Libraries/interfaces.4pw/interfaces/officeStoreDomain.4pw/domainClasses/itemClass.4pw/itemDomain" type="pm/group"/>
+    <Node path="wwdc2019.4pw/Application Libraries/interfaces.4pw/interfaces/officeStoreDomain.4pw/domainClasses/itemClass.4pw/itemDomain/item" type="pm/library"/>
+    <Node path="wwdc2019.4pw/restServices" type="pm/group"/>
+    <Node path="wwdc2019.4pw/restServices/restClient" type="pm/application"/>
+    <Node path="wwdc2019.4pw/restServices/restServer" type="pm/application"/>
+  </ExpandedNodes>
+  <OpenDocuments>
+    <Document container="true" filePath="restServer/restServer.4gl" locator="90:1" module="mod-ce3">
+      <Data name="8" value="CP1252"/>
+    </Document>
+    <Document container="true" filePath="interfaces/interfaceToOfficestore/factoryRestInterface.4gl" locator="340:1" module="mod-ce3">
+      <Data name="8" value="CP1252"/>
+    </Document>
+    <Document container="true" filePath="interfaces/interfaceToOfficestore/interfaceRequest.4gl" locator="148:1" module="mod-ce3">
+      <Data name="8" value="CP1252"/>
+    </Document>
+    <Document container="true" filePath="interfaces/interfaceToOfficestore/restAccountFactory.4gl" locator="53:1:54:0" module="mod-ce3">
+      <Data name="8" value="CP1252"/>
+    </Document>
+    <Document container="true" filePath="interfaces/interfaceToOfficestore/restOrderFactory.4gl" locator="88:1:92:0" module="mod-ce3">
+      <Data name="8" value="CP1252"/>
+    </Document>
+    <Document container="true" filePath="interfaces/interfaceToOfficestore/restSupplierFactory.4gl" locator="97:1" module="mod-ce3">
+      <Data name="8" value="CP1252"/>
+    </Document>
+  </OpenDocuments>
+  <CurrentDocument filePath="interfaces/interfaceToOfficestore/factoryRestInterface.4gl" module="mod-ce3"/>
+</WorkspaceViewState>

@@ -38,10 +38,10 @@ END RECORD
 #+ Description: Performs tasks to validate a user login
 #+
 #+ @code
-#+ CALL processAuthorization(userLogin STRING) RETURNS (INTEGER, STRING)
+#+ CALL processAuthorization(requestPayload STRING) RETURNS (INTEGER, STRING)
 #+
 #+ @parameter
-#+ userLogin STRING
+#+ requestPayload STRING
 #+
 #+ @return
 #+ NONE
@@ -50,7 +50,7 @@ END RECORD
 #+ status : HTTP status code
 #+ wrappedResponse : JSON encoded string   
 #+
-FUNCTION processAuthorization(userLogin STRING) RETURNS (INTEGER, STRING)
+FUNCTION processAuthorization(requestPayload STRING) RETURNS (INTEGER, STRING)
     DEFINE queryException INTEGER
     DEFINE tokenizer base.StringTokenizer 
     DEFINE authorizationMethod, userId, password STRING
@@ -60,17 +60,17 @@ FUNCTION processAuthorization(userLogin STRING) RETURNS (INTEGER, STRING)
 
     TRY 
         CALL logger.logEvent(logger._LOGDEBUG ,SFMT("credentialFactory:%1",__LINE__),"processAuthorization",
-            SFMT("Query filter: %1", userLogin))
+            SFMT("Query filter: %1", requestPayload))
                          
 
         # Parse for method and credentials
-        LET tokenizer = base.StringTokenizer.create(userLogin, " ")
+        LET tokenizer = base.StringTokenizer.create(requestPayload, " ")
         LET authorizationMethod = tokenizer.nextToken()
-        LET userLogin = tokenizer.nextToken()
+        LET requestPayload = tokenizer.nextToken()
 
         # Parse for id and password
-        LET userLogin = security.Base64.ToString(userLogin)
-        LET tokenizer = base.StringTokenizer.create(userLogin,":")
+        LET requestPayload = security.Base64.ToString(requestPayload)
+        LET tokenizer = base.StringTokenizer.create(requestPayload,":")
         LET userId = tokenizer.nextToken()
         LET password = tokenizer.nextToken()
         
@@ -81,7 +81,7 @@ FUNCTION processAuthorization(userLogin STRING) RETURNS (INTEGER, STRING)
             LET wrappedResponse.code    = HTTP_NOTAUTH
             LET wrappedResponse.status  = "ERROR"
             LET wrappedResponse.message = HTTPSTATUSDESC[HTTP_NOTAUTH] --unkown/bad parameters"
-            LET wrappedResponse.data    = SFMT("Missing valid credentials: %1)", userLogin)
+            LET wrappedResponse.data    = SFMT("Missing valid credentials: %1)", requestPayload)
             LET queryException = TRUE
         ELSE 
             CALL credential.addQueryFilter("id", userId)

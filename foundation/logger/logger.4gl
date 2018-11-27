@@ -10,7 +10,6 @@
 # information purposes only.
 # FOURJS_END_COPYRIGHT
 #
-
 #+  Generic Logging Library
 #+  - Create Log file if doesn't exist
 #+  - Adds simple practical info with type (Error, Message, ...)
