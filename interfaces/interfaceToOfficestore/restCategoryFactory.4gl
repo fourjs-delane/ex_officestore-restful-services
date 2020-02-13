@@ -12,15 +12,19 @@
 # FOURJS_END_COPYRIGHT
 #
 IMPORT util
-IMPORT FGL category
+
+# HTTP Utility
+IMPORT FGL http
+
+# Logging utility
 IMPORT FGL logger
 
-DEFINE wrappedResponse RECORD
-    code    INTEGER, # HTTP response code
-    status  STRING,  # success, fail, or error
-    message STRING,  # used for fail or error message
-    data    STRING   # response body or error/fail cause or exception name
-END RECORD 
+# Interface Request
+IMPORT FGL interfaceRequest
+
+# Resource domain
+IMPORT FGL category
+
 ################################################################################
 #+
 #+ Method: processQuery(request com.httpServiceRequest)
@@ -37,21 +41,23 @@ END RECORD
 #+ status : HTTP status code
 #+ wrappedResponse : JSON encoded string   
 #+
-FUNCTION processQuery(queryFilter STRING) RETURNS (INTEGER, STRING)
+FUNCTION processQuery(requestPayload STRING) RETURNS (INTEGER, STRING)
     DEFINE thisJSONArr  util.JSONArray
     DEFINE i, queryException INTEGER
 
     DEFINE query DYNAMIC ARRAY OF RECORD
-          name STRING,
-          value  STRING
+          keyName STRING,
+          keyValue  STRING
     END RECORD
+
+    DEFINE responsePayload responseType
 
     WHENEVER ANY ERROR RAISE
     TRY
-        LET thisJSONArr = util.JSONArray.parse(queryFilter)
+        LET thisJSONArr = util.JSONArray.parse(requestPayload)
 
         CALL logger.logEvent(logger._LOGDEBUG ,SFMT("categoryFactory:%1",__LINE__),"processQuery",
-            SFMT("Query filter: %1", queryFilter))
+            SFMT("Query filter: %1", requestPayload))
                          
         CALL thisJSONArr.toFGL(query)
 
@@ -59,14 +65,11 @@ FUNCTION processQuery(queryFilter STRING) RETURNS (INTEGER, STRING)
         CALL category.initQuery()
         FOR i = 1 TO query.getLength()
             # If the filter key(field) is valid, add to the key/value to the query filter
-            IF category.isValidQuery(query[i].name) THEN
-                CALL category.addQueryFilter(query[i].name, query[i].value)
+            IF category.isValidQuery(query[i].keyName) THEN
+                CALL category.addQueryFilter(query[i].keyName, query[i].keyValue)
             ELSE
                 # Handle unkown/bad parameters
-                LET wrappedResponse.code    = 400
-                LET wrappedResponse.status  = "ERROR"
-                LET wrappedResponse.message = "unkown/bad parameters"
-                LET wrappedResponse.data    = queryFilter
+                CALL interfaceRequest.setResponse(HTTP_BADREQUEST, "ERROR", "unkown/bad parameters", requestPayload)
                 LET queryException = TRUE
             END IF 
         END FOR
@@ -76,21 +79,18 @@ FUNCTION processQuery(queryFilter STRING) RETURNS (INTEGER, STRING)
             CALL category.getRecords()    
 
             # Set response data
-            LET wrappedResponse.data = category.getJSONEncoding()
-            LET wrappedResponse.code = 200
-            LET wrappedResponse.status = "SUCCESS"
+            CALL interfaceRequest.setResponse(HTTP_OK, "SUCCESS", "", category.getJSONEncoding())
         END IF
         
     CATCH
         # Return some kind of error: must use STATUS before it is reset by next code statment
-        LET wrappedResponse.data    = SFMT("%1: %2", STATUS, err_get(STATUS))
-        LET wrappedResponse.code    = 500
-        LET wrappedResponse.status  = "ERROR"
-        LET wrappedResponse.message = "resource query failed"
+        CALL interfaceRequest.setResponse(HTTP_INTERNALERROR, "ERROR", HTTPSTATUSDESC[HTTP_INTERNALERROR], SFMT("Query status: %1", STATUS))
         CALL logger.logEvent(logger._LOGDEBUG ,SFMT("categoryFactory:%1",__LINE__),"processQuery",
             SFMT("SQLSTATE: %1 SQLERRMESSAGE: %2", SQLSTATE, SQLERRMESSAGE))
     END TRY
 
-    RETURN wrappedResponse.code, util.JSON.stringify(wrappedResponse)
+    # Return wrapped response AND code(for better upstream performance)
+    CALL interfaceRequest.getResponse() RETURNING responsePayload.*
+    RETURN responsePayload.code, util.JSON.stringify(responsePayload)
 
 END FUNCTION

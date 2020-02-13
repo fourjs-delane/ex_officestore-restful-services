@@ -13,18 +13,18 @@
 #
 IMPORT util
 
+# HTTP Utility
+IMPORT FGL http
+
 # Logging utility
 IMPORT FGL logger
+
+# Interface Request
+IMPORT FGL interfaceRequest
 
 # Resource domain
 IMPORT FGL orderItem
 
-DEFINE wrappedResponse RECORD
-    code    INTEGER, # HTTP response code
-    status  STRING,  # success, fail, or error
-    message STRING,  # used for fail or error message
-    data    STRING   # response body or error/fail cause or exception name
-END RECORD 
 ################################################################################
 #+
 #+ Method: processQuery
@@ -41,22 +41,24 @@ END RECORD
 #+ status : HTTP status code
 #+ wrappedResponse : JSON encoded string   
 #+
-FUNCTION processQuery(queryFilter STRING) RETURNS (INTEGER, STRING)
+FUNCTION processQuery(requestPayload STRING) RETURNS (INTEGER, STRING)
     DEFINE thisJSONArr  util.JSONArray
     DEFINE i, queryException INTEGER
 
     DEFINE query DYNAMIC ARRAY OF RECORD
-          name STRING,
-          value  STRING
+          keyName STRING,
+          keyValue  STRING
     END RECORD
+
+    DEFINE responsePayload responseType
 
     # Let the referencing entity handle errors
     WHENEVER ANY ERROR RAISE
     TRY
-        LET thisJSONArr = util.JSONArray.parse(queryFilter)
+        LET thisJSONArr = util.JSONArray.parse(requestPayload)
 
         CALL logger.logEvent(logger._LOGDEBUG ,SFMT("orderItemFactory:%1",__LINE__),"processQuery",
-            SFMT("Query filter: %1", queryFilter))
+            SFMT("Query filter: %1", requestPayload))
                          
         CALL thisJSONArr.toFGL(query)
 
@@ -64,40 +66,33 @@ FUNCTION processQuery(queryFilter STRING) RETURNS (INTEGER, STRING)
         CALL orderItem.initQuery()
         FOR i = 1 TO query.getLength()
             # If the filter key(field) is valid, add to the key/value to the query filter
-            IF orderItem.isValidQuery(query[i].name) THEN
-                CALL orderItem.addQueryFilter(query[i].name, query[i].value)
+            IF orderItem.isValidQuery(query[i].keyName) THEN
+                CALL orderItem.addQueryFilter(query[i].keyName, query[i].keyValue)
             ELSE 
                 # Handle unkown/bad parameters
-                LET wrappedResponse.code    = 400
-                LET wrappedResponse.status  = "ERROR"
-                LET wrappedResponse.message = "unkown/bad parameters"
-                LET wrappedResponse.data    = queryFilter
+                CALL interfaceRequest.setResponse(HTTP_BADREQUEST, "ERROR", "unkown/bad parameters", requestPayload)
                 LET queryException = TRUE
             END IF 
         END FOR
 
+        # If no exceptions in the query request, retrieve the resource
         IF NOT queryException THEN
             # Execute resource query
             CALL orderItem.getRecords()
 
             # Set response data
-            LET wrappedResponse.data = orderItem.getJSONEncoding()
-            LET wrappedResponse.code = 200
-            LET wrappedResponse.status = "SUCCESS"
+            CALL interfaceRequest.setResponse(HTTP_OK, "SUCCESS", "", orderItem.getJSONEncoding())
         END IF
 
     CATCH
         # Return some kind of error: must use STATUS before it is reset by next code statment
-        LET wrappedResponse.data    = SFMT("%1: %2", STATUS, err_get(STATUS))
-        LET wrappedResponse.code    = 500
-        LET wrappedResponse.status  = "ERROR"
-        LET wrappedResponse.message = "resource query failed"
+        CALL interfaceRequest.setResponse(HTTP_INTERNALERROR, "ERROR", HTTPSTATUSDESC[HTTP_INTERNALERROR], SFMT("Query status: %1", STATUS))
         CALL logger.logEvent(logger._LOGDEBUG ,SFMT("orderItemFactory:%1",__LINE__),"processQuery",
             SFMT("SQLSTATE: %1 SQLERRMESSAGE: %2", SQLSTATE, SQLERRMESSAGE))
     END TRY
 
-    DISPLAY "Order items: ", util.JSON.stringify(wrappedResponse)
     # Return wrapped response AND code(for better upstream performance)
-    RETURN wrappedResponse.code, util.JSON.stringify(wrappedResponse)
+    CALL interfaceRequest.getResponse() RETURNING responsePayload.*
+    RETURN responsePayload.code, util.JSON.stringify(responsePayload)
 
 END FUNCTION

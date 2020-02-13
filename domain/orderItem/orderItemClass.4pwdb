@@ -1,32 +1,38 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <WorkspaceDatabase fileContentsEncoding="CP1252" version="2.0">
-<File m="orderItem" n="orderItem.4gl" ts="20170801100645866">
+<File m="orderItem" n="orderItem.4gl" ts="20181011085900324">
 <Ref t="orderItemTypes.inc"/>
-<Fct c="10" el="385" l="383" n="setQueryid(thisID STRING)" t="F"/>
-<Fct c="10" el="381" l="379" n="initQuery()" t="F"/>
-<Fct c="18" el="374" l="357" n="deleteRecordById(thisData STRING)" t="F"/>
-<Fct c="10" el="339" l="316" n="processRecordsDelete(thisData STRING)" t="F">
-<Call c="15" l="330" n="deleteRecordById" t="F"/>
+<Fct c="10" el="463" l="461" n="setQueryid(thisID STRING)" t="F" v="pub"/>
+<Fct c="10" el="459" l="456" n="initQuery()" t="F" v="pub"/>
+<Fct c="17" el="451" l="444" n="addQueryFilter(columnKey STRING,columnValue STRING)" t="F" v="pub"/>
+<Fct c="17" el="427" l="418" n="isValidQuery(queryName STRING)" t="F" v="pub"/>
+<Fct c="18" el="401" l="399" n="getQueryFilter()" t="F"/>
+<Fct c="18" el="382" l="365" n="deleteRecordById(thisData STRING)" t="F"/>
+<Fct c="10" el="347" l="324" n="processRecordsDelete(thisData STRING)" t="F" v="pub">
+<Call c="15" l="338" n="deleteRecordById" t="F"/>
 </Fct>
-<Fct c="18" el="298" l="280" n="insertRecord(thisData STRING)" t="F"/>
-<Fct c="10" el="262" l="239" n="processRecordsInsert(thisData STRING)" t="F">
-<Call c="18" l="253" n="insertRecord" t="F"/>
+<Fct c="18" el="306" l="288" n="insertRecord(thisData STRING)" t="F"/>
+<Fct c="10" el="270" l="247" n="processRecordsInsert(thisData STRING)" t="F" v="pub">
+<Call c="18" l="261" n="insertRecord" t="F"/>
 </Fct>
-<Fct c="18" el="222" l="199" n="updateRecordById(thisData STRING)" t="F"/>
-<Fct c="10" el="181" l="147" n="processRecordsUpdate(thisData STRING)" t="F">
-<Call c="18" l="164" n="updateRecordById" t="F"/>
+<Fct c="18" el="230" l="207" n="updateRecordById(thisData STRING)" t="F"/>
+<Fct c="10" el="189" l="155" n="processRecordsUpdate(thisData STRING)" t="F" v="pub">
+<Call c="18" l="172" n="updateRecordById" t="F"/>
 </Fct>
-<Fct c="10" el="129" l="127" n="getRecordsList()" t="F"/>
-<Fct c="10" el="109" l="107" n="init()" t="F"/>
-<Fct c="10" el="90" l="88" n="getJSONEncoding()" t="F"/>
-<Fct c="10" el="71" l="51" n="getRecords()" t="F"/>
-<Todo l="33" t=" determine if mutators should be used instead; should be PRIVATE; how to do this for an array&#13;"/>
-<Todo l="178" t=" formulate a JSON style response for an update&#13;"/>
-<Todo l="259" t=" formulate a JSON style response for an update&#13;"/>
-<Todo l="295" t=" formulate a JSON style response for an update&#13;"/>
-<Todo l="371" t=" formulate a JSON style response for an update&#13;"/>
+<Fct c="10" el="137" l="135" n="getRecordsList()" t="F" v="pub"/>
+<Fct c="10" el="117" l="115" n="init()" t="F" v="pub"/>
+<Fct c="10" el="98" l="96" n="getJSONEncoding()" t="F" v="pub"/>
+<Fct c="10" el="79" l="57" n="getRecords()" t="F" v="pub">
+<Call c="50" l="66" n="getQueryFilter" t="F"/>
+<Call c="17" i="logger" l="68" n="logEvent" t="F"/>
+</Fct>
+<Todo l="39" t="determine if mutators should be used instead; should be PRIVATE; how to do this for an array&#13;"/>
+<Todo l="186" t="formulate a JSON style response for an update&#13;"/>
+<Todo l="267" t="formulate a JSON style response for an update&#13;"/>
+<Todo l="303" t="formulate a JSON style response for an update&#13;"/>
+<Todo l="379" t="formulate a JSON style response for an update&#13;"/>
 </File>
-<File m="orderItemTypes" n="orderItemTypes.inc" ts="20170715080909532"/>
+<File m="orderItemTypes" n="orderItemTypes.inc" ts="20181011085904658"/>
 <File m="tester" n="tester.4gl" ts="20170717075855916">
 <Dep t="orderItem.4gl"/>
 <Fct c="1" el="69" l="5" n="main()" t="F">

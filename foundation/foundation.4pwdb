@@ -19,7 +19,11 @@
 <Call c="14" l="39" n="programExit" p="application/appUtility.4gl" t="F"/>
 </Fct>
 </File>
-<File m="http" n="http/http.4gl" ts="20180621111102285"/>
+<File m="http" n="http/http.4gl" ts="20181011085403515">
+<Fct c="17" el="131" l="122" n="isHttpPayloadValid(method STRING)" t="F" v="pub"/>
+<Fct c="17" el="115" l="87" n="initHttpStatuses()" t="F" v="pub"/>
+<Fct c="17" el="83" l="67" n="initHttpMethods()" t="F" v="pub"/>
+</File>
 <File m="logger" n="logger/logger.4gl" ts="20180619205654547">
 <Fct c="18" el="184" l="153" n="defaultLogger(logCategory INTEGER,logClass STRING,logEvent STRING,logMessage STRING)" t="F"/>
 <Fct c="17" el="131" l="102" n="initializeLog(logLevel STRING,logPath STRING,logFile STRING)" t="F">

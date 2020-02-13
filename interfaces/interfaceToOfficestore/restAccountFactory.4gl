@@ -19,17 +19,12 @@ IMPORT FGL http
 # Logging utility
 IMPORT FGL logger
 
+# Interface Request
+IMPORT FGL interfaceRequest
+
 # Resource domain
 IMPORT FGL account
 
-SCHEMA officestore 
-
-DEFINE wrappedResponse RECORD
-    code    INTEGER, # HTTP response code
-    status  STRING,  # success, fail, or error
-    message STRING,  # used for fail or error message
-    data    STRING   # response body or error/fail cause or exception name
-END RECORD
 ################################################################################
 #+
 #+ Method: processQuery(request com.httpServiceRequest)
@@ -46,23 +41,24 @@ END RECORD
 #+ status : HTTP status code
 #+ wrappedResponse : JSON encoded string   
 #+
-FUNCTION processQuery(queryFilter STRING) RETURNS (INTEGER, STRING)
+FUNCTION processQuery(requestPayload STRING) RETURNS (INTEGER, STRING)
     DEFINE thisJSONArr  util.JSONArray
     DEFINE i, queryException INTEGER
-    DEFINE theseRecords DYNAMIC ARRAY OF RECORD LIKE account.*
         
     DEFINE query DYNAMIC ARRAY OF RECORD
-          name STRING,
-          value  STRING
+          keyName STRING,
+          keyValue  STRING
     END RECORD
+
+    DEFINE responsePayload responseType
 
     # Let the referencing entity handle errors
     WHENEVER ANY ERROR RAISE 
     TRY
-        LET thisJSONArr = util.JSONArray.parse(queryFilter)
+        LET thisJSONArr = util.JSONArray.parse(requestPayload)
 
         CALL logger.logEvent(logger._LOGDEBUG ,SFMT("accountFactory:%1",__LINE__),"processQuery",
-            SFMT("Query filter: %1", queryFilter))
+            SFMT("Query filter: %1", requestPayload))
                          
         CALL thisJSONArr.toFGL(query)
 
@@ -70,14 +66,11 @@ FUNCTION processQuery(queryFilter STRING) RETURNS (INTEGER, STRING)
         CALL account.initQuery()
         FOR i = 1 TO query.getLength()
             # If the filter key(field) is valid, add to the key/value to the query filter
-            IF account.isValidQuery(query[i].name) THEN
-                CALL account.addQueryFilter(query[i].name, query[i].value)
+            IF account.isValidQuery(query[i].keyName) THEN
+                CALL account.addQueryFilter(query[i].keyName, query[i].keyValue)
             ELSE 
                 # Handle unkown/bad parameters
-                LET wrappedResponse.code    = HTTP_BADREQUEST
-                LET wrappedResponse.status  = "ERROR"
-                LET wrappedResponse.message = HTTPSTATUSDESC[HTTP_BADREQUEST] --unkown/bad parameters"
-                LET wrappedResponse.data    = queryFilter
+                CALL interfaceRequest.setResponse(HTTP_BADREQUEST, "ERROR", "unkown/bad parameters", requestPayload)
                 LET queryException = TRUE
             END IF 
         END FOR
@@ -88,24 +81,20 @@ FUNCTION processQuery(queryFilter STRING) RETURNS (INTEGER, STRING)
             CALL account.getRecords()
 
             # Set response data
-            LET theseRecords = account.getRecordsList()
-            LET wrappedResponse.data = account.getJSONEncoding()
-            LET wrappedResponse.code = HTTP_OK
-            LET wrappedResponse.status = "SUCCESS"
+            CALL interfaceRequest.setResponse(HTTP_OK, "SUCCESS", "", account.getJSONEncoding())
         END IF
 
     CATCH
         # Return some kind of error: must use STATUS before it is reset by next code statment
-        LET wrappedResponse.data    = SFMT("Query status: %1", STATUS)
-        LET wrappedResponse.code    = HTTP_INTERNALERROR
-        LET wrappedResponse.status  = "ERROR"
-        LET wrappedResponse.message = HTTPSTATUSDESC[HTTP_INTERNALERROR]
+        CALL interfaceRequest.setResponse(HTTP_INTERNALERROR, "ERROR", HTTPSTATUSDESC[HTTP_INTERNALERROR], SFMT("Query status: %1", STATUS))
+
         CALL logger.logEvent(logger._LOGDEBUG ,SFMT("accountFactory:%1",__LINE__),"processQuery",
             SFMT("SQLSTATE: %1 SQLERRMESSAGE: %2", SQLSTATE, SQLERRMESSAGE))
     END TRY
 
     # Return wrapped response AND code(for better upstream performance)
-    RETURN wrappedResponse.code, util.JSON.stringify(wrappedResponse)
+    CALL interfaceRequest.getResponse() RETURNING responsePayload.*
+    RETURN responsePayload.code, util.JSON.stringify(responsePayload)
 
 END FUNCTION
 
@@ -125,36 +114,41 @@ END FUNCTION
 #+ status : HTTP status code
 #+ wrappedResponse : JSON encoded string   
 #+
-FUNCTION processUpdate(updatePayload STRING) RETURNS (INTEGER, STRING)
+FUNCTION processUpdate(requestPayload STRING) RETURNS (INTEGER, STRING)
+    DEFINE tempString STRING
+    DEFINE responsePayload responseType
 
     # Let the referencing entity handle errors
     WHENEVER ANY ERROR RAISE 
     TRY
         CALL logger.logEvent(logger._LOGDEBUG ,SFMT("accountFactory:%1",__LINE__),"processUpdate",
-            SFMT("Update payload: %1", updatePayload))
+            SFMT("Update payload: %1", requestPayload))
                          
         # Process the update payload
         CALL account.init()
         CALL account.initQuery()
         
-        LET wrappedResponse.code = account.processRecordsUpdate(updatePayload)
-        LET wrappedResponse.data = account.getJSONEncoding()
-        LET wrappedResponse.status = "SUCCESS"
+        CALL interfaceRequest.setResponse(account.processRecordsUpdate(requestPayload), "SUCCESS", "", account.getJSONEncoding())
+        #LET wrappedResponse.code = account.processRecordsUpdate(requestPayload)
+        #LET wrappedResponse.data = account.getJSONEncoding()
+        #LET wrappedResponse.status = "SUCCESS"
 
     CATCH
         # Return some kind of error: must use STATUS before it is reset by next code statment
-        LET wrappedResponse.data    = SFMT("Update status: %1", STATUS)
-        LET wrappedResponse.code    = HTTP_INTERNALERROR
-        LET wrappedResponse.status  = "ERROR"
-        LET wrappedResponse.message = "resource update failed"
+        LET tempString    = SFMT("Update status: %1", STATUS)
+        CALL interfaceRequest.setResponse(HTTP_INTERNALERROR, "ERROR", "resource update failed", tempString)
+        #LET wrappedResponse.data    = SFMT("Update status: %1", STATUS)
+        #LET wrappedResponse.code    = HTTP_INTERNALERROR
+        #LET wrappedResponse.status  = "ERROR"
+        #LET wrappedResponse.message = "resource update failed"
         CALL logger.logEvent(logger._LOGDEBUG ,SFMT("accountFactory:%1",__LINE__),"processUpdate",
             SFMT("SQLSTATE: %1 SQLERRMESSAGE: %2", SQLSTATE, SQLERRMESSAGE))
         
     END TRY
 
     # Return wrapped response AND code(for better upstream performance)
-    RETURN wrappedResponse.code, util.JSON.stringify(wrappedResponse)
-
+    CALL interfaceRequest.getResponse() RETURNING responsePayload.*
+    RETURN responsePayload.code, util.JSON.stringify(responsePayload.data)
 END FUNCTION
 
 ################################################################################
@@ -173,35 +167,41 @@ END FUNCTION
 #+ status : HTTP status code
 #+ wrappedResponse : JSON encoded string   
 #+
-FUNCTION processInsert(insertPayload STRING) RETURNS (INTEGER, STRING)
+FUNCTION processInsert(requestPayload STRING) RETURNS (INTEGER, STRING)
+    DEFINE tempString STRING
+    DEFINE responsePayload responseType
 
     # Let the referencing entity handle errors
     WHENEVER ANY ERROR RAISE 
     TRY
         CALL logger.logEvent(logger._LOGDEBUG ,SFMT("accountFactory:%1",__LINE__),"processInsert",
-            SFMT("Insert payload: %1", insertPayload))
+            SFMT("Insert payload: %1", requestPayload))
                          
         # Process the update payload
         CALL account.init()
         CALL account.initQuery()
         
-        LET wrappedResponse.code = account.processRecordsInsert(insertPayload)
-        LET wrappedResponse.data = account.getJSONEncoding()
-        LET wrappedResponse.status = "SUCCESS"
+        CALL interfaceRequest.setResponse(account.processRecordsInsert(requestPayload), "SUCCESS", "", account.getJSONEncoding())
+        #LET wrappedResponse.code = account.processRecordsInsert(requestPayload)
+        #LET wrappedResponse.data = account.getJSONEncoding()
+        #LET wrappedResponse.status = "SUCCESS"
 
     CATCH
         # Return some kind of error: must use STATUS before it is reset by next code statment
-        LET wrappedResponse.data    = SFMT("Insert status: %1", STATUS)
-        LET wrappedResponse.code    = HTTP_INTERNALERROR
-        LET wrappedResponse.status  = "ERROR"
-        LET wrappedResponse.message = "resource insert failed"
+        LET tempString    = SFMT("Insert status: %1", STATUS)
+        CALL interfaceRequest.setResponse(HTTP_INTERNALERROR, "ERROR", "resource insert failed", tempString)
+        #LET wrappedResponse.data    = SFMT("Insert status: %1", STATUS)
+        #LET wrappedResponse.code    = HTTP_INTERNALERROR
+        #LET wrappedResponse.status  = "ERROR"
+        #LET wrappedResponse.message = "resource insert failed"
         CALL logger.logEvent(logger._LOGDEBUG ,SFMT("accountFactory:%1",__LINE__),"processInsert",
             SFMT("SQLSTATE: %1 SQLERRMESSAGE: %2", SQLSTATE, SQLERRMESSAGE))
         
     END TRY
 
     # Return wrapped response AND code(for better upstream performance)
-    RETURN wrappedResponse.code, util.JSON.stringify(wrappedResponse)
+    CALL interfaceRequest.getResponse() RETURNING responsePayload.*
+    RETURN responsePayload.code, util.JSON.stringify(responsePayload.data)
 
 END FUNCTION
 
@@ -221,38 +221,42 @@ END FUNCTION
 #+ status : HTTP status code
 #+ wrappedResponse : JSON encoded string   
 #+
-FUNCTION processDelete(deleteFilter STRING) RETURNS (INTEGER, STRING)
+FUNCTION processDelete(requestPayload STRING) RETURNS (INTEGER, STRING)
+    DEFINE tempString STRING
+    DEFINE responsePayload responseType
+
     DEFINE thisJSONArr  util.JSONArray
     DEFINE i, queryException INTEGER
     DEFINE deleteCount INTEGER
         
     DEFINE query DYNAMIC ARRAY OF RECORD
-          name STRING,
-          value  STRING
+          keyName STRING,
+          keyValue  STRING
     END RECORD
 
     # Let the referencing entity handle errors
     WHENEVER ANY ERROR RAISE 
     TRY
         CALL logger.logEvent(logger._LOGDEBUG ,SFMT("accountFactory:%1",__LINE__),"processDelete",
-            SFMT("Delete filter: %1", deleteFilter))
+            SFMT("Delete filter: %1", requestPayload))
                          
-        LET thisJSONArr = util.JSONArray.parse(deleteFilter)
+        LET thisJSONArr = util.JSONArray.parse(requestPayload)
 
         CALL thisJSONArr.toFGL(query)
 
         # Set the delete filter values
         CALL account.initQuery()
         FOR i = 1 TO query.getLength()
-            CASE query[i].NAME
+            CASE query[i].keyName
             WHEN "user"
-                CALL account.setQueryID(query[i].value)
+                CALL account.setQueryID(query[i].keyValue)
             OTHERWISE
                 # Handle unkown/bad parameters
-                LET wrappedResponse.code    = HTTP_BADREQUEST
-                LET wrappedResponse.status  = "ERROR"
-                LET wrappedResponse.message = "unkown/bad parameters"
-                LET wrappedResponse.data    = deleteFilter
+                CALL interfaceRequest.setResponse(HTTP_BADREQUEST, "ERROR", "unkown/bad parameters", requestPayload)
+                #LET wrappedResponse.code    = HTTP_BADREQUEST
+                #LET wrappedResponse.status  = "ERROR"
+                #LET wrappedResponse.message = "unkown/bad parameters"
+                #LET wrappedResponse.data    = requestPayload
                 LET queryException = TRUE
             END CASE 
         END FOR
@@ -262,24 +266,28 @@ FUNCTION processDelete(deleteFilter STRING) RETURNS (INTEGER, STRING)
             LET deleteCount = account.deleteRecords()
 
             # Set response data
+            CALL interfaceRequest.setResponse(HTTP_OK, "SUCCESS", SFMT("%1 records deleted.", deleteCount), account.getJSONEncoding())
             #LET theseRecords = account.getRecordsList()
             #LET wrappedResponse.data = account.getJSONEncoding()
-            LET wrappedResponse.message = SFMT("%1 records deleted.", deleteCount)
-            LET wrappedResponse.code = HTTP_OK
-            LET wrappedResponse.status = "SUCCESS"
+            #LET wrappedResponse.message = SFMT("%1 records deleted.", deleteCount)
+            #LET wrappedResponse.code = HTTP_OK
+            #LET wrappedResponse.status = "SUCCESS"
         END IF
 
     CATCH
         # Return some kind of error: must use STATUS before it is reset by next code statment
-        LET wrappedResponse.data    = SFMT("Query status: %1", STATUS)
-        LET wrappedResponse.code    = HTTP_INTERNALERROR
-        LET wrappedResponse.status  = "ERROR"
-        LET wrappedResponse.message = "resource delete failed"
+        LET tempString    = SFMT("Query status: %1", STATUS)
+        CALL interfaceRequest.setResponse(HTTP_INTERNALERROR, "ERROR", "resource delete failed", tempString)
+        #LET wrappedResponse.data    = SFMT("Query status: %1", STATUS)
+        #LET wrappedResponse.code    = HTTP_INTERNALERROR
+        #LET wrappedResponse.status  = "ERROR"
+        #LET wrappedResponse.message = "resource delete failed"
         CALL logger.logEvent(logger._LOGDEBUG ,SFMT("accountFactory:%1",__LINE__),"processDelete",
             SFMT("SQLSTATE: %1 SQLERRMESSAGE: %2", SQLSTATE, SQLERRMESSAGE))
     END TRY
 
     # Return wrapped response AND code(for better upstream performance)
-    RETURN wrappedResponse.code, util.JSON.stringify(wrappedResponse)
+    CALL interfaceRequest.getResponse() RETURNING responsePayload.*
+    RETURN responsePayload.code, util.JSON.stringify(responsePayload.data)
 
 END FUNCTION

@@ -1,2 +1,0 @@
-ws.getAllAccounts.url = "http://localhost:8090/wa/r/accounts"
-#ws.getAllcustomers.url = "http://localhost:8090/customer/id/101"
